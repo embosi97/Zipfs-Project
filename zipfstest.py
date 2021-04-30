@@ -217,4 +217,4 @@ def percentageCount(hash):
 
 print(generateChart(url='https://en.wikipedia.org/wiki/Albania', ftype='url'))
 
-print(generateChart(url='Great_Gatsby.txt', ftype='file'))
+print(generateChart(url='great_gatsby.txt', ftype='file'))
