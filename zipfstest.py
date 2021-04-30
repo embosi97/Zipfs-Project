@@ -6,7 +6,6 @@ from collections import Counter
 from langdetect import detect
 from datetime import date
 import matplotlib.pyplot as plt
-import math
 import os
 import time, stat
 import PyPDF2
@@ -45,7 +44,7 @@ def parseSite(url):
         #Utilizes the re module's sub methods to clean up the words (made lowercase) by replacing the regex pattern with ""
         text = re.sub("[^\w0-9 ]", "", word.get_text().lower())
         #Checks to see if the word is in a particular language
-        if (detect(text) == 'es'):
+        if (detect(text) == 'en'):
             #Inserts the word into count (Counter object)
             count.update(text.split(" "))
 
@@ -53,7 +52,6 @@ def parseSite(url):
     del count['']
     #Returns the Counter object
     return count
-
 
 #This function parses files instead of URL
 def parseFile(file):
@@ -140,8 +138,8 @@ def generateChart(url, ftype='url'):
 
     #Converting the Counter object to a dictionary so that we can better use the keys and values
     #To make plot and scatter chart
-    if len(word_count) >= 100:
-        hash = dict(word_count.most_common(100))
+    if len(word_count) >= 201:
+        hash = dict(word_count.most_common(201))
     else:
         hash = dict(word_count.most_common(len(word_count)))
 
@@ -201,36 +199,22 @@ def percentageCount(hash):
     percentSum = 0
     zipfPerfectPercent = 0
 
-    #Iterating through the sorted top 15 words from the site
+    #Iterating through the sorted top 200 words from the site
     #0(N) time algorithm that'll return the similarity percentage of the frequecies
     for i in range(0, len(zvalues) - 1):
 
-        zdifference = (mostFreqWord // (2 + i))
-
-        curr = math.floor((zvalues[1 + i] / mostFreqWord) * 100)
-
-        #This increments by 100 each time so we can compare how similar the word freqs
-        #in the 'hash' are to the perfect zipf's chart
+        zdifference = (mostFreqWord / (2 + i))
+        current = zvalues[1 + i]
+        #This increments by 100 each time so we can compare how similar a perfect zipf's chart would be to the actual zipf's chart
         zipfPerfectPercent += 100
 
-        #Calculates the percent difference between the ideal zipf's division (zdifference) and the division
-        #between the most frequent word and the current word (curr)
-        if (curr < zdifference):
-            theDiff = (100 - (abs(curr - zdifference) / zdifference) * 100.0)
-            percentSum += theDiff
-
-        elif (zdifference < curr):
-            theDiff = (100 - (abs(zdifference - curr) / curr) * 100.0)
-            percentSum += theDiff
-
-        else:
-            #100% match so percentSum is incremented by 100 in tandem with zipfPerfectPercent
-            percentSum += 100
+        #Calculates the percent difference between the ideal zipf's division (zdifference) and the division between the most frequent word/(2+i) and the current word (current)
+        theDiff = ((zdifference / current) * 100)
+        percentSum += theDiff
 
     #Rounding the final percent to 2 decimal points
-    return round(((percentSum / zipfPerfectPercent) * 100), 2)
+    return round((percentSum / zipfPerfectPercent) * 100, 2)
 
+print(generateChart(url='https://en.wikipedia.org/wiki/Albania', ftype='url'))
 
-print(generateChart(url='https://elpais.com/', ftype='url'))
-
-#print(generateChart(url='samplepages.pdf', ftype='file'))
+print(generateChart(url='Great_Gatsby.txt', ftype='file'))
