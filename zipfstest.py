@@ -1,16 +1,20 @@
 #Necessary imports
 import requests
 import re
+import pytesseract
 from bs4 import BeautifulSoup
 from collections import Counter
 from langdetect import detect
 from datetime import date
+from PIL import Image
 import matplotlib.pyplot as plt
 import os
 import time, stat
 import PyPDF2
 from requests.exceptions import MissingSchema, InvalidURL
 
+global alphanumeric 
+alphanumeric = "[^\w0-9 ]"
 
 #ZipfsSite object that stores the url, hash, and the last modified date of the site or file (if it exists)
 class ZipfSite:
@@ -42,7 +46,7 @@ def parseSite(url):
     #Going through the soup 'html'
     for word in soup.findAll('html'):
         #Utilizes the re module's sub methods to clean up the words (made lowercase) by replacing the regex pattern with ""
-        text = re.sub("[^\w0-9 ]", "", word.get_text().lower())
+        text = re.sub(alphanumeric, "", word.get_text().lower())
         #Checks to see if the word is in a particular language
         if (detect(text) == 'en'):
             #Inserts the word into count (Counter object)
@@ -70,6 +74,7 @@ def parseFile(file):
     hasDigits = re.compile('\d')
 
     count = Counter()
+    
     #If the extension is a .txt, .doc, or docx file, proceed
     #with parsing in this manner
     if extension == '.txt' or extension == '.docx' or extension == '.doc':
@@ -80,7 +85,7 @@ def parseFile(file):
 
             for line in word_list:
                 #Using regex to remove non-alphabet letters
-                text = re.sub("[^\w0-9 ]", "", line.lower())
+                text = re.sub(alphanumeric, "", line.lower())
 
                 if (bool(hasDigits.search(text)) == False and len(text) > 0):
                     #Inserts the word into count (Counter object)
@@ -113,10 +118,26 @@ def parseFile(file):
         #For-Loop to get all the individual words of the PDF
         for line in stringBuilder.split():
 
-            text = re.sub("[^\w0-9 ]", "", line.lower())
+            text = re.sub(alphanumeric, "", line.lower())
 
             if (bool(hasDigits.search(text)) == False and len(text) > 0):
                 count.update(text.split(" "))
+
+    #In the case an image containing text is passed through 
+    elif extension == '.png' or extension == '.jpeg' or extension == '.jpg':
+        #Python-tesseract is an optical character recognition (OCR) tool for python. 
+        #It will recognize and “read” the text embedded in images.
+        stringBuilder = pytesseract.image_to_string(Image.open(f'{file}'))
+
+        for line in stringBuilder.split():
+
+            text = re.sub(alphanumeric, "",
+                line.lower())
+
+            if(bool(hasDigits.search(text)) == False and len(text) > 0):
+                count.update(text.split(" "))
+
+    #redirect if count is empty (when Django phase begins)
 
     return count
 
@@ -218,3 +239,5 @@ def percentageCount(hash):
 print(generateChart(url='https://en.wikipedia.org/wiki/Albania', ftype='url'))
 
 print(generateChart(url='great_gatsby.txt', ftype='file'))
+
+print(generateChart(url='poem.jpeg', ftype = 'file'))
