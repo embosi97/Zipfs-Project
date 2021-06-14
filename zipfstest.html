@@ -1,0 +1,85 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    
+      <meta charset="utf-8">
+      <title>Bokeh Plot</title>
+      
+      
+        
+          
+        
+        
+          
+        <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js" integrity="sha384-T2yuo9Oe71Cz/I4X9Ac5+gpEa5a8PpJCDlqKYO0CfAuEszu1JrXLl8YugMqYe3sM" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            Bokeh.set_log_level("info");
+        </script>
+        
+      
+      
+    
+  </head>
+  
+  
+  <body>
+    
+      
+        
+          
+          
+            
+              <div class="bk-root" id="fd838526-a2e6-4439-b806-68c50d16d175" data-root-id="1004"></div>
+            
+          
+        
+      
+      
+        <script type="application/json" id="1154">
+          {"f099cea9-c05f-494a-a6ad-72a77d3b7946":{"roots":{"references":[{"attributes":{"axis_label":"Word Rank","axis_label_standoff":10,"axis_label_text_color":"#E0E0E0","axis_label_text_font":"Helvetica","axis_label_text_font_size":"1.25em","axis_label_text_font_style":"normal","axis_line_alpha":0,"axis_line_color":"#E0E0E0","formatter":{"id":"1041"},"major_label_orientation":"vertical","major_label_text_color":"#E0E0E0","major_label_text_font":"Helvetica","major_label_text_font_size":"1.025em","major_tick_line_alpha":0,"major_tick_line_color":"#E0E0E0","minor_tick_line_alpha":0,"minor_tick_line_color":"#E0E0E0","ticker":{"id":"1016"}},"id":"1015","type":"CategoricalAxis"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"1001"},{"id":"1002"},{"id":"1003"},{"id":"1052"}]},"id":"1023","type":"Toolbar"},{"attributes":{},"id":"1013","type":"LinearScale"},{"attributes":{},"id":"1019","type":"BasicTicker"},{"attributes":{},"id":"1011","type":"CategoricalScale"},{"attributes":{"bottom":1723.9099999999999,"fill_alpha":0.3,"fill_color":"#5cb85c"},"id":"1029","type":"BoxAnnotation"},{"attributes":{"overlay":{"id":"1022"}},"id":"1001","type":"BoxZoomTool"},{"attributes":{"background_fill_alpha":0.25,"background_fill_color":"#20262B","border_line_alpha":0,"glyph_width":15,"items":[{"id":"1051"}],"label_standoff":8,"label_text_color":"#E0E0E0","label_text_font":"Helvetica","label_text_font_size":"1.025em","spacing":8},"id":"1050","type":"Legend"},{"attributes":{"factors":["the","and","a","of","to","i","in","he","was","that","it","you","his","with","at","her","had","on","she","for","me","as","him","from","but","my","all","said","out","this","we","gatsby","up","an","there","were","tom","or","into","if","about","by","daisy","they","one","when","have","over","be","then","so","what","is","like","down","who","no","back","came","been","man","some","any","little","just","do","know","not","now","dont","its","before","house","went","project","after","eyes","come","got","mr","see","old","didnt","looked","other","them","time","your","away","more","way","get","new","car","im","which","two","night","us","going","around"]},"id":"1007","type":"FactorRange"},{"attributes":{"callback":null,"tooltips":"Word '@x' has @y occurrances"},"id":"1003","type":"HoverTool"},{"attributes":{"dimensions":"width"},"id":"1052","type":"PanTool"},{"attributes":{"line_alpha":0.1,"line_color":"white","line_width":2,"x":{"field":"x"},"y":{"field":"y"}},"id":"1032","type":"Line"},{"attributes":{"data":{"fill_color":["#ff19a1ff","#fffe1ff","#ffe74ff","#ffc48ff","#ffc0bff","#ffbc1ff","#ff894ff","#ff7f0ff","#ff7a1ff","#ff5f0ff","#ff55eff","#ff542ff","#ff4e2ff","#ff4a2ff","#ff427ff","#ff3e8ff","#ff3ccff","#ff3b2ff","#ff3b2ff","#ff359ff","#ff33dff","#ff2c2ff","#ff2b8ff","#ff276ff","#ff26cff","#ff269ff","#ff252ff","#ff252ff","#ff21aff","#ff218ff","#ff201ff","#ff1efff","#ff1efff","#ff1e7ff","#ff1e7ff","#ff1d5ff","#ff1beff","#ff1b9ff","#ff1acff","#ff1a5ff","#ff190ff","#ff17eff","#ff177ff","#ff174ff","#ff174ff","#ff16fff","#ff16dff","#ff165ff","#ff165ff","#ff15dff","#ff15dff","#ff146ff","#ff141ff","#ff132ff","#ff12dff","#ff120ff","#ff11bff","#ff116ff","#ff113ff","#ff111ff","#ff10eff","#ff109ff","#ff109ff","#ff107ff","#ffffff","#ffffff","#fffaff","#fff7ff","#fff7ff","#fff5ff","#fff5ff","#ffe8ff","#ffe8ff","#ffe8ff","#ffe6ff","#ffe0ff","#ffdbff","#ffd9ff","#ffd9ff","#ffd6ff","#ffd6ff","#ffd4ff","#ffd1ff","#ffd1ff","#ffcfff","#ffcfff","#ffcfff","#ffc7ff","#ffc2ff","#ffbfff","#ffbfff","#ffbdff","#ffbaff","#ffbaff","#ffb8ff","#ffb8ff","#ffb8ff","#ffb5ff","#ffb5ff","#ffb2ff","#ffb2ff"],"x":["the","and","a","of","to","i","in","he","was","that","it","you","his","with","at","her","had","on","she","for","me","as","him","from","but","my","all","said","out","this","we","gatsby","up","an","there","were","tom","or","into","if","about","by","daisy","they","one","when","have","over","be","then","so","what","is","like","down","who","no","back","came","been","man","some","any","little","just","do","know","not","now","dont","its","before","house","went","project","after","eyes","come","got","mr","see","old","didnt","looked","other","them","time","your","away","more","way","get","new","car","im","which","two","night","us","going","around"],"y":[2573,1594,1451,1233,1209,1180,861,797,766,596,539,528,490,465,417,392,381,371,371,336,325,277,273,247,243,242,233,233,211,210,201,194,194,191,191,184,175,173,168,165,157,150,147,146,146,144,143,140,140,137,137,128,126,120,118,113,111,109,108,107,106,104,104,103,100,100,98,97,97,96,96,91,91,91,90,88,86,85,85,84,84,83,82,82,81,81,81,78,76,75,75,74,73,73,72,72,72,71,71,70,70]},"selected":{"id":"1049"},"selection_policy":{"id":"1048"}},"id":"1035","type":"ColumnDataSource"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"field":"fill_color"},"line_alpha":{"value":0.1},"line_color":{"value":"white"},"size":{"units":"screen","value":9},"x":{"field":"x"},"y":{"field":"y"}},"id":"1037","type":"Circle"},{"attributes":{},"id":"1049","type":"Selection"},{"attributes":{"background_fill_color":"#20262B","below":[{"id":"1015"}],"border_fill_color":"#15191C","center":[{"id":"1017"},{"id":"1021"},{"id":"1027"},{"id":"1028"},{"id":"1029"},{"id":"1050"}],"left":[{"id":"1018"}],"outline_line_alpha":0.25,"outline_line_color":"#E0E0E0","renderers":[{"id":"1033"},{"id":"1038"}],"sizing_mode":"stretch_width","title":{"id":"1005"},"toolbar":{"id":"1023"},"toolbar_location":"below","x_range":{"id":"1007"},"x_scale":{"id":"1011"},"y_range":{"id":"1009"},"y_scale":{"id":"1013"}},"id":"1004","subtype":"Figure","type":"Plot"},{"attributes":{"data":{"x":["the","and","a","of","to","i","in","he","was","that","it","you","his","with","at","her","had","on","she","for","me","as","him","from","but","my","all","said","out","this","we","gatsby","up","an","there","were","tom","or","into","if","about","by","daisy","they","one","when","have","over","be","then","so","what","is","like","down","who","no","back","came","been","man","some","any","little","just","do","know","not","now","dont","its","before","house","went","project","after","eyes","come","got","mr","see","old","didnt","looked","other","them","time","your","away","more","way","get","new","car","im","which","two","night","us","going","around"],"y":[2573,1594,1451,1233,1209,1180,861,797,766,596,539,528,490,465,417,392,381,371,371,336,325,277,273,247,243,242,233,233,211,210,201,194,194,191,191,184,175,173,168,165,157,150,147,146,146,144,143,140,140,137,137,128,126,120,118,113,111,109,108,107,106,104,104,103,100,100,98,97,97,96,96,91,91,91,90,88,86,85,85,84,84,83,82,82,81,81,81,78,76,75,75,74,73,73,72,72,72,71,71,70,70]},"selected":{"id":"1047"},"selection_policy":{"id":"1046"}},"id":"1030","type":"ColumnDataSource"},{"attributes":{"axis_label":"Word Frequency","axis_label_standoff":10,"axis_label_text_color":"#E0E0E0","axis_label_text_font":"Helvetica","axis_label_text_font_size":"1.25em","axis_label_text_font_style":"normal","axis_line_alpha":0,"axis_line_color":"#E0E0E0","formatter":{"id":"1043"},"major_label_text_color":"#E0E0E0","major_label_text_font":"Helvetica","major_label_text_font_size":"1.025em","major_tick_line_alpha":0,"major_tick_line_color":"#E0E0E0","minor_tick_line_alpha":0,"minor_tick_line_color":"#E0E0E0","ticker":{"id":"1019"}},"id":"1018","type":"LinearAxis"},{"attributes":{"data_source":{"id":"1030"},"glyph":{"id":"1031"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"1032"},"selection_glyph":null,"view":{"id":"1034"}},"id":"1033","type":"GlyphRenderer"},{"attributes":{"fill_alpha":{"value":0.7},"fill_color":{"field":"fill_color"},"line_color":{"value":"white"},"size":{"units":"screen","value":9},"x":{"field":"x"},"y":{"field":"y"}},"id":"1036","type":"Circle"},{"attributes":{},"id":"1046","type":"UnionRenderers"},{"attributes":{},"id":"1016","type":"CategoricalTicker"},{"attributes":{"axis":{"id":"1015"},"grid_line_alpha":0.25,"grid_line_color":"#E0E0E0","ticker":null},"id":"1017","type":"Grid"},{"attributes":{"line_color":"white","line_width":2,"x":{"field":"x"},"y":{"field":"y"}},"id":"1031","type":"Line"},{"attributes":{},"id":"1009","type":"DataRange1d"},{"attributes":{},"id":"1043","type":"BasicTickFormatter"},{"attributes":{"bottom":849.09,"fill_alpha":0.3,"fill_color":"#f0ad4e","top":1723.9099999999999},"id":"1028","type":"BoxAnnotation"},{"attributes":{},"id":"1002","type":"ResetTool"},{"attributes":{"bottom_units":"screen","fill_alpha":0.5,"fill_color":"lightgrey","left_units":"screen","level":"overlay","line_alpha":1.0,"line_color":"black","line_dash":[4,4],"line_width":2,"right_units":"screen","top_units":"screen"},"id":"1022","type":"BoxAnnotation"},{"attributes":{"axis":{"id":"1018"},"dimension":1,"grid_line_alpha":0.25,"grid_line_color":"#E0E0E0","ticker":null},"id":"1021","type":"Grid"},{"attributes":{"label":{"value":"Words"},"renderers":[{"id":"1038"}]},"id":"1051","type":"LegendItem"},{"attributes":{},"id":"1041","type":"CategoricalTickFormatter"},{"attributes":{"fill_alpha":0.3,"fill_color":"#d9534f","top":849.09},"id":"1027","type":"BoxAnnotation"},{"attributes":{"source":{"id":"1035"}},"id":"1039","type":"CDSView"},{"attributes":{},"id":"1048","type":"UnionRenderers"},{"attributes":{"source":{"id":"1030"}},"id":"1034","type":"CDSView"},{"attributes":{"align":"center","text":"Results for 'great_gatsby.txt' \n 2021-06-13 \n MacOS","text_color":{"value":"white"},"text_font":"Helvetica","text_font_size":{"value":"18px"}},"id":"1005","type":"Title"},{"attributes":{},"id":"1047","type":"Selection"},{"attributes":{"data_source":{"id":"1035"},"glyph":{"id":"1036"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"1037"},"selection_glyph":null,"view":{"id":"1039"}},"id":"1038","type":"GlyphRenderer"}],"root_ids":["1004"]},"title":"Bokeh Application","version":"2.2.3"}}
+        </script>
+        <script type="text/javascript">
+          (function() {
+            var fn = function() {
+              Bokeh.safely(function() {
+                (function(root) {
+                  function embed_document(root) {
+                    
+                  var docs_json = document.getElementById('1154').textContent;
+                  var render_items = [{"docid":"f099cea9-c05f-494a-a6ad-72a77d3b7946","root_ids":["1004"],"roots":{"1004":"fd838526-a2e6-4439-b806-68c50d16d175"}}];
+                  root.Bokeh.embed.embed_items(docs_json, render_items);
+                
+                  }
+                  if (root.Bokeh !== undefined) {
+                    embed_document(root);
+                  } else {
+                    var attempts = 0;
+                    var timer = setInterval(function(root) {
+                      if (root.Bokeh !== undefined) {
+                        clearInterval(timer);
+                        embed_document(root);
+                      } else {
+                        attempts++;
+                        if (attempts > 100) {
+                          clearInterval(timer);
+                          console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+                        }
+                      }
+                    }, 10, root)
+                  }
+                })(window);
+              });
+            };
+            if (document.readyState != "loading") fn();
+            else document.addEventListener("DOMContentLoaded", fn);
+          })();
+        </script>
+    
+  </body>
+  
+</html>

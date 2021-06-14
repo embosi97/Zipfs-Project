@@ -1,20 +1,36 @@
 #Necessary imports
 import requests
 import re
+import platform
+import sys
+import codecs
 import pytesseract
 from bs4 import BeautifulSoup
 from collections import Counter
 from langdetect import detect
 from datetime import date
 from PIL import Image
-import matplotlib.pyplot as plt
+from number_parser import parse_number
+from bokeh.plotting import figure, show
+from bokeh.models import PolyAnnotation
+from bokeh.core.enums import MarkerType
+from bokeh.models import BoxAnnotation, Range1d
+from bokeh.io import curdoc
+from bokeh.models.tools import BoxZoomTool, PanTool, ResetTool, HoverTool
+import random
 import os
 import time, stat
 import PyPDF2
 from requests.exceptions import MissingSchema, InvalidURL
 
-global alphanumeric 
+global alphanumeric
 alphanumeric = "[^\w0-9 ]"
+
+#Getting the operating system
+def OS():
+    oSystem = platform.system()  #Darwin, Linux, Java, and Windows
+    return ('MacOS' if oSystem == 'Darwin' else oSystem)
+
 
 #ZipfsSite object that stores the url, hash, and the last modified date of the site or file (if it exists)
 class ZipfSite:
@@ -27,6 +43,72 @@ class ZipfSite:
     def __str__(self):
         return self.url
 
+def createBokehPlot(url, hash, zvalues):
+
+    #If the url string has a normal schema, make url into a substring of itself
+    if '//' in url:
+        url = url[url.rindex('//') + 2:len(url)]
+
+        if url[len(url) - 1] == '/':
+            url = url[:-1]
+
+    todayDate = date.today()
+
+    hashLength = len(zvalues)
+
+    wordList = list(hash.keys())
+
+    #Generate list of rgb hex colors in relation to Y-axis
+    colors = ["#%02x%02x%02x" % (255, int(round(value * 255 / 100)), 255) for value in zvalues]
+
+    # create a new plot with a title and axis labels
+    p = figure(
+        x_range= wordList,
+        title= f'Results for \'{url}\' \n {todayDate} \n {OS()}',
+        x_axis_label = "Word Rank",
+        y_axis_label= "Word Frequency",
+        sizing_mode="stretch_width",
+        toolbar_location="below",
+        tools=[BoxZoomTool(), ResetTool(), HoverTool()],
+        tooltips=f'Word \'@x\' has @y occurrances',
+        )
+    curdocColor = random.choice(["dark_minimal", "light_minimal"])
+    curdoc().theme = curdocColor
+
+    p.title.align = 'center'
+    p.title.text_color = "gray" if curdocColor == 'light_minimal' else "white"
+    p.title.text_font_size = "18px"
+    p.xaxis.major_label_orientation = "vertical"
+
+    low_box = BoxAnnotation(top=zvalues[0]*.33, fill_alpha=0.3, fill_color='#d9534f')
+    mid_box = BoxAnnotation(bottom=zvalues[0]*.33, top=zvalues[0]-(zvalues[0]*.33), fill_alpha=0.3, fill_color='#f0ad4e')
+    high_box = BoxAnnotation(bottom=zvalues[0]-(zvalues[0]*.33), fill_alpha=0.3, fill_color='#5cb85c')
+
+    p.add_layout(low_box)
+    p.add_layout(mid_box)
+    p.add_layout(high_box)
+
+    # add a line renderer with legend and line thickness
+    p.line(
+        wordList,
+        zvalues,
+        line_color= "gray" if curdocColor == 'light_minimal' else "white",
+        line_width=2,
+        )
+
+    p.circle(
+        wordList,
+        zvalues,
+        legend_label="Words",
+        fill_color= colors,
+        fill_alpha=.7,
+        line_color= "black" if curdocColor == 'light_minimal' else "white",
+        size=9,
+    )
+    p.add_tools(PanTool(dimensions="width"))
+
+    # show the results
+    show(p)
 
 #Parsing function where a URL is passed as a parameter
 def parseSite(url):
@@ -47,6 +129,7 @@ def parseSite(url):
     for word in soup.findAll('html'):
         #Utilizes the re module's sub methods to clean up the words (made lowercase) by replacing the regex pattern with ""
         text = re.sub(alphanumeric, "", word.get_text().lower())
+
         #Checks to see if the word is in a particular language
         if (detect(text) == 'en'):
             #Inserts the word into count (Counter object)
@@ -74,7 +157,7 @@ def parseFile(file):
     hasDigits = re.compile('\d')
 
     count = Counter()
-    
+
     #If the extension is a .txt, .doc, or docx file, proceed
     #with parsing in this manner
     if extension == '.txt' or extension == '.docx' or extension == '.doc':
@@ -90,6 +173,27 @@ def parseFile(file):
                 if (bool(hasDigits.search(text)) == False and len(text) > 0):
                     #Inserts the word into count (Counter object)
                     count.update(text.split(" "))
+
+    elif extension == '.html':
+
+        #The codecs module provides stream and file interfaces for transcoding data
+        html = codecs.open(file, "r", "utf-8")
+
+        #Similar steps to ParseSite, except there is no need for findAll thanks to codecs
+        soup = BeautifulSoup(html, "html.parser")
+
+        parsedHTML = soup.find('html')
+
+        noTag = re.sub(alphanumeric, "", parsedHTML.get_text().lower())
+
+        temp = []
+        #extend the newly created list to the empty list
+        temp.extend(noTag.split())
+
+        for text in temp:
+
+            if (bool(hasDigits.search(text)) == False and len(text) > 0):
+                count.update(text.split(" "))
 
     #In the case the file is a pdf
     elif extension == '.pdf':
@@ -123,24 +227,25 @@ def parseFile(file):
             if (bool(hasDigits.search(text)) == False and len(text) > 0):
                 count.update(text.split(" "))
 
-    #In the case an image containing text is passed through 
+    #In the case an image containing text is passed through
     elif extension == '.png' or extension == '.jpeg' or extension == '.jpg':
-        #Python-tesseract is an optical character recognition (OCR) tool for python. 
+        #Python-tesseract is an optical character recognition (OCR) tool for python.
         #It will recognize and “read” the text embedded in images.
         stringBuilder = pytesseract.image_to_string(Image.open(f'{file}'))
 
         for line in stringBuilder.split():
 
-            text = re.sub(alphanumeric, "",
-                line.lower())
+            text = re.sub(alphanumeric, "", line.lower())
 
-            if(bool(hasDigits.search(text)) == False and len(text) > 0):
+            if (bool(hasDigits.search(text)) == False and len(text) > 0):
                 count.update(text.split(" "))
 
     #redirect if count is empty (when Django phase begins)
+    else:
+        print("Not a supported File")
+        sys.exit()
 
     return count
-
 
 #Function that takes URL as an argument and generates a chart from the Counter object returned by parseSite
 def generateChart(url, ftype='url'):
@@ -159,41 +264,16 @@ def generateChart(url, ftype='url'):
 
     #Converting the Counter object to a dictionary so that we can better use the keys and values
     #To make plot and scatter chart
-    if len(word_count) >= 201:
-        hash = dict(word_count.most_common(201))
+    if len(word_count) >= 101:
+        hash = dict(word_count.most_common(101))
     else:
         hash = dict(word_count.most_common(len(word_count)))
 
     #Calls this function to return a formatted string containing the similarity percentage of hash
-    percent = percentageCount(hash)
+    percent, zvalues = percentageCount(hash)
 
-    #If the url string has a normal schema, make url into a substring of itself
-    if '//' in url:
-        url = url[url.rindex('//') + 2:len(url)]
-
-        if url[len(url) - 1] == '/':
-            url = url[:-1]
-
-    todayDate = date.today()
-    #Making a line and scatter plot using hash's keys and values
-    plt.xlim(0, 24)
-    plt.plot(list(hash.keys()), list(hash.values()), color='k', linestyle='-.')
-    plt.scatter(list(hash.keys()), list(hash.values()), color='r', marker='.')
-    plt.title(f'Zipf\'s Results for \'{url}\' \n {todayDate}')
-    plt.ylabel('Number of Occurances')
-    plt.xlabel('Word Rank')
-    plt.legend(['Zipf\'s line', 'Words'], loc='upper right')
-    #plt.savefig(f'Zipf\'s Law for {url}')
-
-    #Labeling the scatter points with the number of occurances for that particular word
-    #enumerate is used so i can be a number (for the X, Y coordinates) and txt can be the values from
-    #the 'hash' dictionary
-    for i, txt in enumerate(list(hash.values())):
-        plt.annotate(f' {txt} \n #{i+1}',
-                     (list(hash.keys())[i], list(hash.values())[i]))
-
-    zplot = plt
-    zplot.show()
+    #Creating a bokeh chart
+    createBokehPlot(url, hash, zvalues)
 
     #Formatting the percent properly with the '%' sign
     percent = f'{percent}%'
@@ -234,10 +314,15 @@ def percentageCount(hash):
         percentSum += theDiff
 
     #Rounding the final percent to 2 decimal points
-    return round((percentSum / zipfPerfectPercent) * 100, 2)
+    return round((percentSum / zipfPerfectPercent) * 100, 2), zvalues
+
 
 print(generateChart(url='https://en.wikipedia.org/wiki/Albania', ftype='url'))
 
-print(generateChart(url='great_gatsby.txt', ftype='file'))
+#print(generateChart(url='great_gatsby.txt', ftype='file'))
 
-print(generateChart(url='poem.jpeg', ftype = 'file'))
+#print(generateChart(url='poem.jpeg', ftype='file'))
+
+#print(generateChart(url='note.xml', ftype = 'file'))
+
+# print(generateChart(url='Albania - Wikipedia.html', ftype = 'file'))
